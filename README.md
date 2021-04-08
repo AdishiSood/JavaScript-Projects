@@ -14,6 +14,10 @@ The Caesar Cipher technique is one of the earliest and simplest method of encryp
 ## Roman_Numeral_Converter 🔢
 Roman numerals are a number system developed in ancient Rome where letters represent numbers. The modern use of Roman numerals involves the letters I, V, X, L, C, D, and M. I made a converter which can convert numbers from 1 to 3999 into Roman numerals or viceversa.
 
+## DrumKit 🥁
+The point of this project is to have each key, when pressed, make a corresponding drum noise. It also uses CSS transitions and animations to make the project more interactive to the user.
+
+
 # Live demo
 [PalindromeChecker](https://codepen.io/adishisood/full/JjbJOda)
 
