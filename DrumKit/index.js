@@ -1,71 +1,67 @@
-var numberOfButtons = document.querySelectorAll(".drum").length;
+// JavaScript Drum Kit App
 
-for(i=0; i < numberOfButtons; i++)
+{
+	const playingClass = 'playing',
+		crashRide = document.getElementById('crash-ride'),
+		hiHatTop = document.getElementById('hihat-top');
 
-    document.querySelectorAll(".drum")[i].addEventListener("click", function (){
+	const animateCrashOrRide = () => {
+		crashRide.style.transform = 'rotate(0deg) scale(1.5)';
+	};
 
-            var buttonInnerHtml = this.innerHTML;
+	const animateHiHatClosed = () => {
+		hiHatTop.style.top = '171px';
+	};
 
-            makeSound(buttonInnerHtml);
-            buttonAnimation(buttonInnerHtml);
-        }
-    );
+	const playSound = e => {
+		const keyCode = e.keyCode,
+			keyElement = document.querySelector(`div[data-key="${keyCode}"]`);
 
-document.addEventListener("keypress",function(event){
-    makeSound(event.key);
-    buttonAnimation(event.key);
-});
+		if(!keyElement) return;
 
+		const audioElement = document.querySelector(`audio[data-key="${keyCode}"]`);
+		audioElement.currentTime = 0;
+		audioElement.play();
 
-function makeSound(key){
+		switch(keyCode) {
+			case 69:
+			case 82:
+				animateCrashOrRide();
+				break;
+			case 75:
+				animateHiHatClosed();
+				break;
+		}
 
-    switch (key) {
-        case "a":
-            var tom1 = new Audio("sounds/tom-1.mp3");
-            tom1.play();
-            break;
+		keyElement.classList.add(playingClass);
+	};
 
-        case "s":
-            var tom2 = new Audio("sounds/tom-2.mp3");
-            tom2.play();
-            break;
+	const removeCrashRideTransition = e => {
+		if(e.propertyName !== 'transform') return;
 
-        case "d":
-            var tom2 = new Audio("sounds/tom-3.mp3");
-            tom2.play();
-            break;
+		e.target.style.transform = 'rotate(-7.2deg) scale(1.5)';
+	};
 
-        case "f":
-            var tom2 = new Audio("sounds/tom-4.mp3");
-            tom2.play();
-            break;
+	const removeHiHatTopTransition = e => {
+		if(e.propertyName !== 'top') return;
 
-        case "g":
-            var tom2 = new Audio("sounds/snare.mp3");
-            tom2.play();
-            break;
+		e.target.style.top = '166px';
+	};	
 
-        case "h":
-            var tom2 = new Audio("sounds/crash.mp3");
-            tom2.play();
-            break;
+	const removeKeyTransition = e => {
+		if(e.propertyName !== 'transform') return;
 
-        case "j":
-            var tom2 = new Audio("sounds/kick-bass.mp3");
-            tom2.play();
-            break;
+		e.target.classList.remove(playingClass)
+	};
 
-        default: console.log(buttonInnerHtml);
+	const drumKeys = Array.from(document.querySelectorAll('.key'));
 
-    }
-}
+	drumKeys.forEach(key => {
+		key.addEventListener('transitionend', removeKeyTransition);
+	});
 
-function buttonAnimation(currentkey){
-    var activeButton = document.querySelector("."+ currentkey);
+	crashRide.addEventListener('transitionend', removeCrashRideTransition);
+	hiHatTop.addEventListener('transitionend', removeHiHatTopTransition);
 
-    activeButton.classList.add("pressed");
-
-    setTimeout(function(){
-        activeButton.classList.remove("pressed")
-    },50)
+	window.addEventListener('keydown', playSound);
 }
